@@ -15,7 +15,7 @@ Route::get('jobs', action: function (): View {
         'jobs',
         [
 
-            'jobs' => Job::all(),
+            'jobs' => Job::with(relations: 'employer')->get(),
 
         ]
     );
