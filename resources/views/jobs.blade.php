@@ -15,4 +15,10 @@
 
         @endforeach
     </div>
+
+    <div class="px-4 py-8">
+        {{ $jobs->links() }}
+    </div>
+
+
 </x-layout>

@@ -15,7 +15,7 @@ Route::get('jobs', action: function (): View {
         'jobs',
         [
 
-            'jobs' => Job::with(relations: 'employer')->get(),
+            'jobs' => Job::with(relations: 'employer')->simplePaginate(perPage: 10),
 
         ]
     );
