@@ -27,7 +27,7 @@
                         </div>
                         <div class="hidden md:block">
                             <div class="ml-10 flex items-baseline space-x-4">
-                                <x-link :active="request()->is('/')" href="/">Dashboard</x-link>
+                                <x-link :active="request()->is('/')" href="/">Home</x-link>
                                 <x-link :active="request()->is('jobs')" href="/jobs">Jobs</x-link>
                                 <x-link :active="request()->is('contact')" href="/contact">Contact</x-link>
 
@@ -90,7 +90,7 @@
             <!-- Mobile menu, show/hide based on menu state. -->
             <div class="md:hidden" id="mobile-menu">
                 <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-                    <x-link :active="request()->is('/')" href="/">Dashboard</x-link>
+                    <x-link :active="request()->is('/')" href="/">Home</x-link>
                     <x-link :active="request()->is('jobs')" href="/jobs">Jobs</x-link>
                     <x-link :active="request()->is('contact')" href="/contact">Contact</x-link>
 
@@ -123,8 +123,9 @@
         </nav>
 
         <header class="bg-white shadow-sm">
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 sm:flex sm:justify-between">
                 <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{$heading}}</h1>
+                <x-button href="/jobs/create">create job</x-button>
             </div>
         </header>
         <main>

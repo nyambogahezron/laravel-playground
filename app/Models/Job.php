@@ -10,7 +10,8 @@ class Job extends Model
 {
     use HasFactory;
     protected $table = "job_listings";
-    protected $fillable = ['title', 'salary',];
+    // protected $fillable = ['title', 'salary', 'employer_id']; // This will allow only the title, salary, and employer_id fields to be mass assignable
+    protected $guarded = []; // This will allow all fields to be mass assignable except for the ones that are guarded
 
     public function employer(): BelongsTo
     {
