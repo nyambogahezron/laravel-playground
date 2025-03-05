@@ -35,7 +35,7 @@
 -   `php artisan migrate:fresh --seed`
     `php artisan db:seed --class=SeedClassName`
 
-        -   Drops all tables and re-runs all migrations, then seeds the database.
+    Drops all tables and re-runs all migrations, then seeds the database.
 
 -   `php artisan make:seeder SeederName`
 
@@ -44,3 +44,47 @@
 -   `composer require barryvdh/laravel-debugbar --dev`
 
     -   Installs the Laravel Debugbar package for development.
+
+-   `php artisan make:controller`
+
+    -   Creates a new controller class.
+
+-   `php artisan route:list`
+
+    -   Lists all registered routes for the application.
+
+-   `php artisan route:list --except-vendor`
+
+    -   Lists all registered routes except those provided by vendor packages.
+
+## Different ways of routing
+
+`
+Route::get(uri: 'jobs', action: [JobController::class, 'index']);
+Route::get(uri: '/jobs/create', action: [JobController::class, 'create']);
+Route::get(uri: '/jobs/{job}', action: [JobController::class, 'show']);
+Route::get(uri: '/jobs/{job}/edit', action: [JobController::class, 'edit']);
+Route::patch(uri: '/jobs/{job}', action: [JobController::class, 'update']);
+Route::delete(uri: '/jobs/{job}', action: [JobController::class, 'destroy']);
+Route::post(uri: '/jobs', action: [JobController::class, 'store']);`
+
+`
+Route::controller(JobController::class)->group(function () {
+    Route::get('jobs', 'index');
+    Route::get('/jobs/create', 'create');
+    Route::get('/jobs/{job}', 'show');
+    Route::get('/jobs/{job}/edit', 'edit');
+    Route::patch('/jobs/{job}', 'update');
+    Route::delete('/jobs/{job}', 'destroy');
+    Route::post('/jobs', 'store');
+});`
+
+#### use only/expect
+
+`Route::resource('jobs', JobController::class, [
+    'only' => ['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']
+]);`
+
+### show all
+
+`Route::resource('jobs', JobController::class);`
