@@ -9,6 +9,7 @@ Route::get(uri: '/', action: function (): View {
     return View(view: 'home');
 });
 
+//index
 Route::get(uri: 'jobs', action: function (): View {
     return view(
         view: 'jobs.index',
@@ -20,6 +21,8 @@ Route::get(uri: 'jobs', action: function (): View {
     );
 });
 
+
+//create
 Route::get(uri: '/jobs/create', action: function (): View {
 
     return view(view: 'jobs.create');
@@ -27,6 +30,7 @@ Route::get(uri: '/jobs/create', action: function (): View {
 });
 
 
+//show
 Route::get(uri: '/jobs/{id}', action: function ($id): View {
 
     $job = Job::find(id: $id);
@@ -35,6 +39,46 @@ Route::get(uri: '/jobs/{id}', action: function ($id): View {
 
 });
 
+//edit
+Route::get(uri: '/jobs/{id}/edit', action: function ($id): View {
+
+    $job = Job::find(id: $id);
+
+    return view(view: 'jobs.edit', data: ['job' => $job]);
+
+});
+
+//update
+Route::patch(uri: '/jobs/{id}', action: function ($id) {
+
+    //validation
+    request()->validate(rules: [
+        'title' => 'min:3|required',
+        'salary' => 'required'
+    ]);
+
+    $job = Job::findOrFail(id: $id);
+
+
+    $job->update(attributes: [
+        'title' => request(key: 'title'),
+        'salary' => request(key: 'salary'),
+    ]);
+
+    return redirect(to: '/jobs/' . $job->id);
+
+});
+
+//delete
+Route::delete(uri: '/jobs/{id}', action: function ($id) {
+
+    Job::findOrFail(id: $id)->delete();
+
+    return redirect(to: '/jobs');
+
+});
+
+//store
 Route::post(uri: '/jobs', action: function () {
 
     //validation
@@ -56,3 +100,9 @@ Route::post(uri: '/jobs', action: function () {
 Route::get(uri: '/contact', action: function (): View {
     return view(view: 'contact');
 });
+
+
+
+
+
+// research on route model binding
