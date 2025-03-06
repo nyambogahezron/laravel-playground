@@ -61,6 +61,10 @@ php artisan make:policy
 
 php artisan make:mail
 
+php artisan queue:work
+
+php artisan make:job
+
 ## Different ways of routing
 
 `
