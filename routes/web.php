@@ -14,12 +14,12 @@ Route::get(uri: '/jobs/create', action: [JobController::class, 'create'])->middl
 Route::get(uri: '/jobs/{job}', action: [JobController::class, 'show']);
 Route::get(uri: '/jobs/{job}/edit', action: [JobController::class, 'edit'])
     ->middleware('auth')
-    ->can('edit-job', 'job');
+    ->can('edit', 'job');
 Route::patch(uri: '/jobs/{job}', action: [JobController::class, 'update'])
     ->middleware('auth')
-    ->can('edit-job', 'job');
+    ->can('edit', 'job');
 Route::delete(uri: '/jobs/{job}', action: [JobController::class, 'destroy'])->middleware('auth')
-    ->can('edit-job', 'job');
+    ->can('edit', 'job');
 Route::post(uri: '/jobs', action: [JobController::class, 'store'])->middleware('auth');
 
 
