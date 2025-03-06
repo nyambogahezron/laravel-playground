@@ -18,6 +18,7 @@ class EmployerFactory extends Factory
     {
         return [
             'name' => $this->faker->company(),
+            'user_id' => \App\Models\User::factory(),
         ];
     }
 }

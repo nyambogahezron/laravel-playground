@@ -88,3 +88,8 @@ Route::controller(JobController::class)->group(function () {
 ### show all
 
 `Route::resource('jobs', JobController::class);`
+
+## middleware
+
+`Route::resource(name: 'jobs', controller: JobController::class)->only((['index', 'show']));
+Route::resource(name: 'jobs', controller: JobController::class)->except(['index', 'show'])->middleware('auth');`

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 
@@ -43,8 +45,10 @@ class JobController extends Controller
         return redirect(to: '/jobs');
     }
 
-    public function edit(Job $job): View
+    public function edit(Job $job)
     {
+        // Gate::authorize('edit-job', $job);
+
         return view(view: 'jobs.edit', data: ['job' => $job]);
     }
 
@@ -77,7 +81,5 @@ class JobController extends Controller
     {
         return view(view: 'jobs.create');
     }
-
-
 
 }
