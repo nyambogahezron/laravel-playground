@@ -57,6 +57,10 @@
 
     -   Lists all registered routes except those provided by vendor packages.
 
+php artisan make:policy
+
+php artisan make:mail
+
 ## Different ways of routing
 
 `
