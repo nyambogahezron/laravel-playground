@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
-    /** @use HasFactory<\Database\Factories\TagFactory> */
     use HasFactory;
 
     public function jobs(): BelongsToMany
     {
-        return $this->belongsToMany(related: Job::class, relatedPivotKey: 'job_listing_id');
+        return $this->belongsToMany(Job::class);
     }
 }

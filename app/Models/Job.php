@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,17 +10,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Job extends Model
 {
     use HasFactory;
-    protected $table = "job_listings";
 
-    protected $guarded = [];
-    public function employer(): BelongsTo
+    public function tag(string $name): void
     {
-        return $this->belongsTo(related: Employer::class);
+        $tag = Tag::firstOrCreate(['name' => strtolower($name)]);
+
+        $this->tags()->attach($tag);
     }
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(related: Tag::class, foreignPivotKey: 'job_listing_id');
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function employer(): BelongsTo
+    {
+        return $this->belongsTo(Employer::class);
     }
 }
-

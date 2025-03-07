@@ -2,90 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\JobPosted;
 use App\Models\Job;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Tag;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Validation\Rule;
 
 class JobController extends Controller
 {
-    public function index(): View
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
-        $jobs = Job::with(relations: 'employer')->latest()->simplePaginate(perPage: 10);
+        $jobs = Job::latest()->with(['employer', 'tags'])->get()->groupBy('featured');
 
-        return view(
-            view: 'jobs.index',
-            data: [
-
-                'jobs' => $jobs,
-
-            ]
-        );
+        return view('jobs.index', [
+            'jobs' => $jobs[0],
+            'featuredJobs' => $jobs[1],
+            'tags' => Tag::all(),
+        ]);
     }
-    public function show(Job $job): View
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        return view(view: 'jobs.show', data: ['job' => $job]);
+        return view('jobs.create');
     }
-    public function store(): RedirectResponse
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
-        //validation
-        request()->validate(rules: [
-            'title' => 'min:3|required',
-            'salary' => 'required'
+        $attributes = $request->validate([
+            'title' => ['required'],
+            'salary' => ['required'],
+            'location' => ['required'],
+            'schedule' => ['required', Rule::in(['Part Time', 'Full Time'])],
+            'url' => ['required', 'active_url'],
+            'tags' => ['nullable'],
         ]);
 
-        $job = Job::create(attributes: [
-            'title' => request(key: 'title'),
-            'salary' => request(key: 'salary'),
-            'employer_id' => 1
-        ]);
+        $attributes['featured'] = $request->has('featured');
 
-        Mail::to($job->employer->user)->queue(
-            new JobPosted($job)
-        );
+        $job = Auth::user()->employer->jobs()->create(Arr::except($attributes, 'tags'));
 
-        return redirect(to: '/jobs');
+        if ($attributes['tags'] ?? false) {
+            foreach (explode(',', $attributes['tags']) as $tag) {
+                $job->tag($tag);
+            }
+        }
+
+        return redirect('/');
     }
-
-    public function edit(Job $job)
-    {
-        // Gate::authorize('edit-job', $job);
-
-        return view(view: 'jobs.edit', data: ['job' => $job]);
-    }
-
-    public function update(Job $job): RedirectResponse
-    {
-
-        //validation
-        request()->validate(rules: [
-            'title' => 'min:3|required',
-            'salary' => 'required'
-        ]);
-
-        $job->update(attributes: [
-            'title' => request(key: 'title'),
-            'salary' => request(key: 'salary'),
-        ]);
-
-        return redirect(to: '/jobs/' . $job->id);
-    }
-
-    public function destroy(Job $job): RedirectResponse
-    {
-        $job->delete();
-
-        return redirect(to: '/jobs');
-
-    }
-
-    public function create(): View
-    {
-        return view(view: 'jobs.create');
-    }
-
 }

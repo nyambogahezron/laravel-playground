@@ -1,80 +1,60 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- tailwindcss --}}
-    @vite(['resources/css/app.css'])
-
-    <title>@yield('title', 'Laravel')</title>
-
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pixel Positions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
-
-    <div class="min-h-full">
-        <nav class="bg-gray-800">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="shrink-0">
-                            <img class="size-8"
-                                src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                                alt="Your Company">
-                        </div>
-                        <div class="hidden md:block">
-                            <div class="ml-10 flex items-baseline space-x-4">
-                                <x-link :active="request()->is('/')" href="/">Home</x-link>
-                                <x-link :active="request()->is('jobs')" href="/jobs">Jobs</x-link>
-                                <x-link :active="request()->is('contact')" href="/contact">Contact</x-link>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-row gap-3.5">
-                        @guest
-                            <x-link :active="request()->is('login')" href="/login">Login</x-link>
-                            <x-link :active="request()->is('register')" href="/register">Register</x-link>
-                        @endguest
-
-                        @auth
-                            <form action="/logout" method="post">
-                                @csrf
-                                @method('POST')
-                                <x-button type="button" class="px-5 py-2 bg-blue-500 text-white">Logout</x-button>
-                            </form>
-                        @endauth
-
-                    </div>
-
-                </div>
+<body class="bg-black text-white font-hanken-grotesk pb-20">
+    <div class="px-10">
+        <nav class="flex justify-between items-center py-4 border-b border-white/10">
+            <div>
+                <a href="/">
+                    <img src="{{ Vite::asset('resources/images/logo.svg') }}" alt="">
+                </a>
             </div>
 
+            <div class="space-x-6 font-bold">
+                <a href="/">Jobs</a>
+                <a href="#">Careers</a>
+                <a href="#">Salaries</a>
+                <a href="#">Companies</a>
+            </div>
 
+            @auth
+                <div class="space-x-6 font-bold flex">
+                    <a href="/jobs/create">Post a Job</a>
+
+                    <form method="POST" action="/logout">
+                        @csrf
+                        @method('DELETE')
+
+                        <button>Log Out</button>
+                    </form>
+                </div>
+            @endauth
+
+            @guest
+                <div class="space-x-6 font-bold">
+                    <a href="/register">Sign Up</a>
+                    <a href="/login">Log In</a>
+                </div>
+            @endguest
         </nav>
 
-        <header class="bg-white shadow-sm">
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 sm:flex sm:justify-between">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{$heading}}</h1>
-                <x-button href="/jobs/create">create job</x-button>
-            </div>
-        </header>
-        <main>
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                {{ $slot }}
-            </div>
+        <main class="mt-10 max-w-[986px] mx-auto">
+            {{ $slot }}
         </main>
     </div>
 
-
-
-
-
-
-
 </body>
-
 </html>

@@ -1,40 +1,26 @@
 <?php
 
 use App\Http\Controllers\JobController;
-use App\Http\Controllers\RegisterUserController;
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SessionController;
-use App\Jobs\TranslateJob;
-use App\Models\Job;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', function () {
-    $job = Job::first();
+Route::get('/', [JobController::class, 'index']);
 
-    TranslateJob::dispatch($job);
-    return 'done';
+Route::get('/jobs/create', [JobController::class, 'create'])->middleware('auth');
+Route::post('/jobs', [JobController::class, 'store'])->middleware('auth');
+
+Route::get('/search', SearchController::class);
+Route::get('/tags/{tag:name}', TagController::class);
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create']);
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+
+    Route::get('/login', [SessionController::class, 'create']);
+    Route::post('/login', [SessionController::class, 'store']);
 });
 
-
-Route::view(uri: '/', view: 'home');
-Route::view(uri: '/contact', view: 'contact');
-
-Route::get(uri: 'jobs', action: [JobController::class, 'index']);
-Route::get(uri: '/jobs/create', action: [JobController::class, 'create'])->middleware('auth');
-Route::get(uri: '/jobs/{job}', action: [JobController::class, 'show']);
-Route::get(uri: '/jobs/{job}/edit', action: [JobController::class, 'edit'])
-    ->middleware('auth')
-    ->can('edit', 'job');
-Route::patch(uri: '/jobs/{job}', action: [JobController::class, 'update'])
-    ->middleware('auth')
-    ->can('edit', 'job');
-Route::delete(uri: '/jobs/{job}', action: [JobController::class, 'destroy'])->middleware('auth')
-    ->can('edit', 'job');
-Route::post(uri: '/jobs', action: [JobController::class, 'store'])->middleware('auth');
-
-
-Route::get('/register', [RegisterUserController::class, 'index']);
-Route::post('/register', [RegisterUserController::class, 'store']);
-
-Route::get('/login', [SessionController::class, 'index'])->name('login');
-Route::post('/login', [SessionController::class, 'store']);
-Route::post('/logout', [SessionController::class, 'destroy']);
+Route::delete('/logout', [SessionController::class, 'destroy'])->middleware('auth');

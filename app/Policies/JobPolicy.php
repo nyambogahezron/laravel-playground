@@ -11,8 +11,56 @@ class JobPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function edit(User $user, Job $job)
+    public function viewAny(User $user): bool
     {
-        return $job->employer->user->is($user);
+        //
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Job $job): bool
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Job $job): bool
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Job $job): bool
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Job $job): bool
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Job $job): bool
+    {
+        //
     }
 }
