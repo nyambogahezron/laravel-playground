@@ -65,6 +65,8 @@ php artisan queue:work
 
 php artisan make:job
 
+php artisan storage:link
+
 ## Different ways of routing
 
 `
